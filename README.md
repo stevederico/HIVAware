@@ -26,7 +26,7 @@ HIV education and awareness application providing information about prevention, 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/HIVAware.git
+git clone https://github.com/stevederico/HIVAware.git
 cd HIVAware
 ```
 
