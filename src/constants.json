@@ -2,7 +2,7 @@
     "appName": "HIVAware",
     "appIcon": "ribbon",
     "tagline": "Get HIV Answers",
-    "backendURL": "https://bob.hivaware.org",
+    "backendURL": "/api",
     "devBackendURL": "http://localhost:3000",
     "noLogin": true,
     "pages": [
