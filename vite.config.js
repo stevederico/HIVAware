@@ -12,9 +12,6 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
-  esbuild: {
-    drop: ['console', 'debugger']
-  },
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
@@ -23,6 +20,14 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['react-dom'],
-},
+    include: [
+      'react',
+      'react-dom',
+      'react/jsx-runtime',
+      'react/jsx-dev-runtime',
+      'use-sync-external-store',
+      'use-sync-external-store/shim',
+      'use-sync-external-store/shim/with-selector',
+    ],
+  },
 })

@@ -2,6 +2,27 @@
     "appName": "HIVAware",
     "appIcon": "ribbon",
     "tagline": "Get HIV Answers",
+    "cta": "Get Started",
+    "features": {
+        "title": "Learn About HIV",
+        "items": [
+            {
+                "icon": "🛡️",
+                "title": "Prevention",
+                "description": "Learn proven strategies to protect yourself and others from HIV transmission."
+            },
+            {
+                "icon": "⚠️",
+                "title": "Risk Factors",
+                "description": "Understand the behaviors and situations that increase HIV transmission risk."
+            },
+            {
+                "icon": "🧪",
+                "title": "Testing",
+                "description": "Find out about testing options, what to expect, and where to get tested."
+            }
+        ]
+    },
     "backendURL": "/api",
     "devBackendURL": "http://localhost:3000",
     "noLogin": true,

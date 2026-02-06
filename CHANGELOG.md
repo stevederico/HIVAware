@@ -1,5 +1,15 @@
 # Changelog
 
+2.1.0
+
+  Update skateboard-ui to 2.2.2
+  Add custom landing page
+  Add red theme color
+  Add features section
+  Remove pricing section
+  Fix scroll on landing
+  Fix module resolution
+
 ## [2.0.0] - 2026-01-27
 
 ### Changed

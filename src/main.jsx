@@ -11,15 +11,15 @@ import {
 import { useEffect } from 'react';
 import './assets/styles.css';
 import Layout from '@stevederico/skateboard-ui/Layout';
-import LandingView from '@stevederico/skateboard-ui/LandingView';
+import LandingView from './components/LandingView.jsx';
 import TextView from '@stevederico/skateboard-ui/TextView';
 import SignUpView from '@stevederico/skateboard-ui/SignUpView';
 import SignInView from '@stevederico/skateboard-ui/SignInView';
-import StripeView from '@stevederico/skateboard-ui/StripeView';
+import PaymentView from '@stevederico/skateboard-ui/PaymentView';
 import SettingsView from '@stevederico/skateboard-ui/SettingsView';
 import NotFound from '@stevederico/skateboard-ui/NotFound';
 import { getCurrentUser } from '@stevederico/skateboard-ui/Utilities';
-import { ContextProvider, getState } from './context.jsx';
+import { ContextProvider, getState } from '@stevederico/skateboard-ui/Context';
 import constants from './constants.json';
 import PreventionView from './components/PreventionView.jsx'
 import RisksView from './components/RisksView.jsx'
@@ -92,7 +92,7 @@ const location = useLocation();
             <Route path="risks" element={<RisksView />} />
             <Route path="testing" element={<TestingView />} />
               <Route path="settings" element={<SettingsView />} />
-              <Route path="stripe" element={<StripeView />} />
+              <Route path="stripe" element={<PaymentView />} />
         </Route>
       </Route>
       <Route path="/" element={<LandingView />} />
@@ -119,7 +119,7 @@ const location = useLocation();
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
-  <ContextProvider>
+  <ContextProvider constants={constants}>
     <Router>
       <App />
     </Router>
