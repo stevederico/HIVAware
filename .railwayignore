@@ -1,0 +1,7 @@
+node_modules
+.git
+.deno
+dist
+*.log
+.DS_Store
+deno.lock
