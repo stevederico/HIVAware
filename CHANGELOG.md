@@ -1,5 +1,11 @@
 # Changelog
 
+2.2.0
+
+  Update skateboard-ui 2.22.0
+  Remove unused context
+  Fix context provider
+
 2.1.0
 
   Update skateboard-ui to 2.2.2
