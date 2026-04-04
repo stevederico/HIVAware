@@ -81,3 +81,9 @@ This application provides educational information only and is not a substitute f
 ## Support
 
 For issues and questions, please open an issue on GitHub.
+
+---
+
+<div align="center">
+  Made with <a href="https://github.com/stevederico/skateboard">Skateboard</a> — a React boilerplate with auth and payments
+</div>
