@@ -7,7 +7,7 @@ import {
   Outlet,
   useNavigate,
   useLocation,
-} from 'react-router-dom';
+} from 'react-router';
 import { useEffect } from 'react';
 import './assets/styles.css';
 import Layout from '@stevederico/skateboard-ui/Layout';

@@ -15,11 +15,10 @@
   },
   "dependencies": {
     "@stevederico/skateboard-ui": "3.8.0",
-    "lucide-react": "^0.563.0",
     "next-themes": "^0.4.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-router-dom": "^7.13.0",
+    "react-router": "^7.13.0",
     "use-sync-external-store": "1.4.0"
   },
   "devDependencies": {

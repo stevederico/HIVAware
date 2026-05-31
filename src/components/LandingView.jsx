@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useTheme } from 'next-themes';
 import { getState } from '@stevederico/skateboard-ui/Context';
 import DynamicIcon from '@stevederico/skateboard-ui/DynamicIcon';
-import { Sun, Moon, Check } from 'lucide-react';
+import { Sun, Moon, Check } from '@stevederico/skateboard-ui/icons';
 import { Button } from '@stevederico/skateboard-ui/shadcn/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@stevederico/skateboard-ui/shadcn/ui/card';
 import { Badge } from '@stevederico/skateboard-ui/shadcn/ui/badge';
