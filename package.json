@@ -12,7 +12,11 @@
     "serve": "vite --force --mode development",
     "start": "vite --force --mode development",
     "build": "vite build --mode production",
-    "verify:ui": "node scripts/verify-ui-version.mjs"
+    "verify:ui": "node scripts/verify-ui-version.mjs",
+    "front": "vite --force --mode development",
+    "server": "npm run --workspace=backend dev",
+    "prod": "vite build --mode production",
+    "install-all": "npm install && npm install --workspace=backend"
   },
   "dependencies": {
     "@stevederico/skateboard-ui": "3.8.1",
@@ -27,5 +31,9 @@
     "@vitejs/plugin-react-swc": "^4.2.2",
     "tailwindcss": "4.1.18",
     "vite": "^7.3.1"
-  }
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "skateboardVersion": "3.6.1"
 }

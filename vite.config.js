@@ -29,5 +29,38 @@ export default defineConfig({
       'use-sync-external-store/shim',
       'use-sync-external-store/shim/with-selector',
     ],
+<<<<<<< /var/folders/c7/8_zkmby94mg9cmkd3knh6w940000gn/T/sk-mf-cur.tmp
+=======
+    esbuildOptions: {
+      target: 'esnext',
+      define: {
+        global: 'globalThis'
+      }
+    }
+  },
+  build: {
+    rollupOptions: {
+      external: [
+        /\.node$/,
+        /@tailwindcss\/oxide/
+      ]
+    }
+  },
+  server: {
+    host: 'localhost',
+    open: false,
+    port: 5173,
+    strictPort: false,
+    // Don't pin the HMR port — Vite derives it from the resolved server port.
+    // Hardcoding 5173 broke HMR ("WebSocket closed without opened") whenever
+    // 5173 was taken and the server fell back to 5174 while HMR still dialed 5173.
+    hmr: {
+      overlay: false
+    },
+    watch: {
+      usePolling: false,
+      ignored: ['**/node_modules/**', '**/.git/**']
+    }
+>>>>>>> /var/folders/c7/8_zkmby94mg9cmkd3knh6w940000gn/T/sk-mf-new.tmp
   },
 })
