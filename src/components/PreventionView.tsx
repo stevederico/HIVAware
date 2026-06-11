@@ -2,12 +2,32 @@ import Header from '@stevederico/skateboard-ui/Header';
 import { useEffect, useState, useRef } from "react";
 import { getBackendURL, getCookie, timestampToString, isSubscriber } from '@stevederico/skateboard-ui/Utilities';
 import Sheet from '@stevederico/skateboard-ui/Sheet';
+import type { SheetHandle } from '@stevederico/skateboard-ui/Sheet';
 import stds from '../assets/stds.json'
-export default function PreventionView(props) {
 
-  const [objects, setObjects] = useState([])
-  const [currentItem, setCurrentItem] = useState({})
-  const mySheet = useRef()
+/** A sexually transmitted disease entry shown in the prevention list. */
+interface StdItem {
+  /** Display title */
+  title: string;
+  /** Plain-language description */
+  description: string;
+  /** Common symptoms */
+  symptoms: string;
+  /** How the condition is tested for and treated */
+  testing: string;
+}
+
+/**
+ * Prevention view listing STD info cards with a detail bottom sheet.
+ *
+ * @component
+ * @returns Prevention list with detail sheet
+ */
+export default function PreventionView() {
+
+  const [objects, setObjects] = useState<StdItem[]>([])
+  const [currentItem, setCurrentItem] = useState<Partial<StdItem>>({})
+  const mySheet = useRef<SheetHandle>(null)
 
   useEffect(() => {
       getStarted()
@@ -17,9 +37,9 @@ export default function PreventionView(props) {
     setObjects(stds)
   }
 
-  function itemClicked(item) {
+  function itemClicked(item: StdItem) {
     setCurrentItem(item)
-    return mySheet.current.show()
+    return mySheet.current?.show()
   }
 
   return (
