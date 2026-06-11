@@ -10,7 +10,9 @@ import { Separator } from '@stevederico/skateboard-ui/shadcn/ui/separator';
 
 /**
  * Custom landing page without pricing section.
- * @returns {JSX.Element}
+ *
+ * @component
+ * @returns Landing page with hero, features, and footer
  */
 export default function LandingView() {
   const { state } = getState();

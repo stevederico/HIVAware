@@ -11,7 +11,7 @@ import {
 import { useEffect } from 'react';
 import './assets/styles.css';
 import Layout from '@stevederico/skateboard-ui/Layout';
-import LandingView from './components/LandingView.jsx';
+import LandingView from './components/LandingView';
 import TextView from '@stevederico/skateboard-ui/TextView';
 import SignUpView from '@stevederico/skateboard-ui/SignUpView';
 import SignInView from '@stevederico/skateboard-ui/SignInView';
@@ -20,17 +20,27 @@ import SettingsView from '@stevederico/skateboard-ui/SettingsView';
 import NotFound from '@stevederico/skateboard-ui/NotFound';
 import { getCurrentUser } from '@stevederico/skateboard-ui/Utilities';
 import { ContextProvider, getState } from '@stevederico/skateboard-ui/Context';
+import type { SkateboardConstants } from '@stevederico/skateboard-ui/Utilities';
 import constants from './constants.json';
-import PreventionView from './components/PreventionView.jsx'
-import RisksView from './components/RisksView.jsx'
-import TestingView from './components/TestingView.jsx'
+import PreventionView from './components/PreventionView'
+import RisksView from './components/RisksView'
+import TestingView from './components/TestingView'
 
+/** Route guard that renders protected routes only when authenticated. */
 const ProtectedRoute = () => {
   const auth = isAuthenticated();
   return auth ? <Outlet /> : <Navigate to="/signin" replace />;
 };
 
-function isAuthenticated() {
+/**
+ * Determine whether the current user is authenticated.
+ *
+ * Returns true immediately when the app runs with the `noLogin` flag; otherwise
+ * checks for a `token` cookie.
+ *
+ * @returns True if the user may access protected routes
+ */
+function isAuthenticated(): boolean {
   // Check client-side noLogin flag first
   if (constants.noLogin === true) {
     return true;
@@ -47,6 +57,7 @@ function isAuthenticated() {
   }
 }
 
+/** Root application component wiring up routes and user bootstrap. */
 const App = () => {
 const location = useLocation();
   const navigate = useNavigate();
@@ -117,9 +128,10 @@ const location = useLocation();
 };
 
 const container = document.getElementById('root');
+if (!container) throw new Error('Root element #root not found');
 const root = createRoot(container);
 root.render(
-  <ContextProvider constants={constants}>
+  <ContextProvider constants={constants as unknown as SkateboardConstants}>
     <Router>
       <App />
     </Router>

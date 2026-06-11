@@ -1,9 +1,20 @@
 import Header from '@stevederico/skateboard-ui/Header';
 import { useEffect, useState, useRef } from "react";
+import type { ChangeEvent } from "react";
 import { getBackendURL, getCookie, timestampToString, isSubscriber } from '@stevederico/skateboard-ui/Utilities';
 import Sheet from '@stevederico/skateboard-ui/Sheet';
+import type { SheetHandle } from '@stevederico/skateboard-ui/Sheet';
 
+/** Relative HIV transmission risk for a selected activity. */
+type RiskLevel = "high" | "moderate" | "low" | "none";
 
+/**
+ * HIV risk calculator. Maps a selected sexual activity (and condom/partner-status
+ * inputs) to a transmission risk level shown in a bottom sheet.
+ *
+ * @component
+ * @returns Risk calculator form with result sheet
+ */
 export default function RisksView() {
 
   const [activity, setActivity] = useState("-1");
@@ -11,9 +22,9 @@ export default function RisksView() {
   const [hiv, setHiv] = useState(false);
   const [message, setMessage] = useState('');
 
-  const mySheet = useRef()
+  const mySheet = useRef<SheetHandle>(null)
 
-  function showAlert(level) {
+  function showAlert(level: RiskLevel) {
     if (level == "high") {
       setMessage(`High Risk \n\nHIV can be easily transmitted through this activity. \n\nHIV and STD testing is recomended as soon as possible.  \n\nYou can protect yourself from HIV and STD by using a barrier or condom when having sex or practicing abstinence. You should know you and your partner's HIV and STD status. Regular HIV & STD testing is important.`)
 
@@ -27,12 +38,15 @@ export default function RisksView() {
       setMessage(`Zero Risk \n\nHIV cannot be transmitted through this activity. \n\nNo HIV testing is necessary. \n\nYou can protect yourself from HIV and STD by using a barrier or condom when having sex or practicing abstinence. You should know you and your partner's HIV and STD status. Regular HIV & STD testing is important.`)
     }
 
-    mySheet.current.show()
+    mySheet.current?.show()
   }
 
   function submitClicked() {
+    // The select stores its value as a string; compare numerically to keep the
+    // original loose-equality behavior (e.g. "0" == 0) under strict TypeScript.
+    const activityNum = Number(activity);
 
-    if (activity == 0) {
+    if (activityNum == 0) {
       if (condom && hiv) {
         showAlert("none") //Herpes
       } else if (condom) {
@@ -42,19 +56,7 @@ export default function RisksView() {
       } else {
         showAlert("none") //Herpes
       }
-    } else if (activity == 1) {
-
-      if (condom && hiv) {
-        showAlert("none") //Herpes, HPV, Syphilis
-      } else if (condom) {
-        showAlert("none") //Herpes, HPV, Syphilis
-      } else if (hiv) {
-        showAlert("none") //Herpes, HPV, Syphilis
-      } else {
-        showAlert("none") //Herpes, HPV, Syphilis
-      }
-
-    } else if (activity == 2) { //Hand Job / Masturbation
+    } else if (activityNum == 1) {
 
       if (condom && hiv) {
         showAlert("none") //Herpes, HPV, Syphilis
@@ -66,7 +68,19 @@ export default function RisksView() {
         showAlert("none") //Herpes, HPV, Syphilis
       }
 
-    } else if (activity == 3) { //Oral Sex
+    } else if (activityNum == 2) { //Hand Job / Masturbation
+
+      if (condom && hiv) {
+        showAlert("none") //Herpes, HPV, Syphilis
+      } else if (condom) {
+        showAlert("none") //Herpes, HPV, Syphilis
+      } else if (hiv) {
+        showAlert("none") //Herpes, HPV, Syphilis
+      } else {
+        showAlert("none") //Herpes, HPV, Syphilis
+      }
+
+    } else if (activityNum == 3) { //Oral Sex
 
       if (condom && hiv) {
         showAlert("low")
@@ -78,7 +92,7 @@ export default function RisksView() {
         showAlert("low")
       }
 
-    } else if (activity == 4) { //Vaginal
+    } else if (activityNum == 4) { //Vaginal
 
       if (condom && hiv) {
         showAlert("moderate") //Herpes, Hepatitis, Chlamydia, Gonorrhea, HPV, Syphilis, Trich
@@ -91,7 +105,7 @@ export default function RisksView() {
       }
 
 
-    } else if (activity == 5) { //Anal
+    } else if (activityNum == 5) { //Anal
 
       if (condom && hiv) {
         showAlert("moderate") //Herpes, Hepatitis, Chlamydia, Gonorrhea, HPV, Syphilis, Trich
@@ -103,7 +117,7 @@ export default function RisksView() {
         showAlert("low") //Herpes, Hepatitis, Chlamydia, Gonorrhea, HPV, Syphilis, Trich
       }
 
-    } else if (activity == 6) { //needles
+    } else if (activityNum == 6) { //needles
 
       if (condom && hiv) {
         showAlert("high")
@@ -128,7 +142,7 @@ export default function RisksView() {
             <div className="mb-3">
               <select
                 value={activity}
-                onChange={(e) => setActivity(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => setActivity(e.target.value)}
                 className="border border-2 rounded p-3 mt-3 mr-3 w-full "
               >
                 <option >Select a sexual activity</option>
@@ -144,13 +158,13 @@ export default function RisksView() {
             <div className="flex">
               <div className="mb-3">
                 <label htmlFor="switchCondom" className="text-sm ">Condom</label>
-                <input value={condom}
-                  onChange={(e) =>{ setCondom(e.target.checked)}} className="mx-3" type="checkbox" id="switchCondom" />
+                <input value={String(condom)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>{ setCondom(e.target.checked)}} className="mx-3" type="checkbox" id="switchCondom" />
               </div>
               <div className="mb-5">
                 <label htmlFor="switchHIV" className="text-sm ">Partner is HIV Positive</label>
-                <input value={hiv}
-                  onChange={(e) => setHiv(e.target.checked)} className="ml-3" type="checkbox" id="switchHIV" />
+                <input value={String(hiv)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setHiv(e.target.checked)} className="ml-3" type="checkbox" id="switchHIV" />
               </div>
             </div>
             <div className="flex">
