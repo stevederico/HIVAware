@@ -33,12 +33,11 @@
     "test:coverage:build": "node --experimental-test-module-mocks --experimental-test-coverage --test vite.plugins.test.js scripts/verify-ui-version.test.js"
   },
   "dependencies": {
-    "@stevederico/skateboard-ui": "4.11.0",
+    "@stevederico/skateboard-ui": "4.12.1",
     "next-themes": "^0.4.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-router": "^7.13.0",
-    "use-sync-external-store": "1.4.0"
+    "react-router": "^7.13.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",
