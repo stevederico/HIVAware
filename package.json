@@ -57,5 +57,5 @@
   "engines": {
     "node": ">=24.0.0"
   },
-  "skateboardVersion": "4.9.1"
+  "skateboardVersion": "4.9.2"
 }
