@@ -21,7 +21,10 @@ import NotFound from '@stevederico/skateboard-ui/NotFound';
 import { getCurrentUser } from '@stevederico/skateboard-ui/Utilities';
 import { ContextProvider, getState } from '@stevederico/skateboard-ui/Context';
 import type { SkateboardConstants } from '@stevederico/skateboard-ui/Utilities';
-import constants from './constants.json';
+import rawConstants from './constants.json';
+
+/** Narrow JSON shape, verified assignable to skateboard-ui constants. */
+const constants = rawConstants satisfies SkateboardConstants;
 import PreventionView from './components/PreventionView'
 import RisksView from './components/RisksView'
 import TestingView from './components/TestingView'
@@ -131,7 +134,7 @@ const container = document.getElementById('root');
 if (!container) throw new Error('Root element #root not found');
 const root = createRoot(container);
 root.render(
-  <ContextProvider constants={constants as unknown as SkateboardConstants}>
+  <ContextProvider constants={constants}>
     <Router>
       <App />
     </Router>
