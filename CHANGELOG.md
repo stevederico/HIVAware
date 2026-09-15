@@ -1,5 +1,18 @@
 # Changelog
 
+5.4.0
+
+  Migrate skateboard 5.4.0
+  Bump skateboard-ui 5.1.0
+  Replace Node backend Rust
+  Adopt createSkateboardApp shell
+  Split legal into legal.json
+  Move theme bootstrap public
+  Rewrite icons lucide-react
+  Drop vitest and swc
+  Drop next-themes dependency
+  Refresh stale README
+
 2.2.0
 
   Update skateboard-ui 2.22.0

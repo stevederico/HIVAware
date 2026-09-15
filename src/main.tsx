@@ -1,142 +1,41 @@
-import { createRoot } from 'react-dom/client';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  Outlet,
-  useNavigate,
-  useLocation,
-} from 'react-router';
-import { useEffect } from 'react';
+/**
+ * Application entry point using the Skateboard Application Shell Architecture.
+ *
+ * The shell (`@stevederico/skateboard-ui`) owns routing, context, auth, layout and
+ * theming. This file only declares the app's own views, the custom landing page,
+ * and the lazy legal-document loader.
+ *
+ * @see {@link https://github.com/stevederico/skateboard|Skateboard Docs}
+ */
 import './assets/styles.css';
-import Layout from '@stevederico/skateboard-ui/Layout';
-import LandingView from './components/LandingView';
-import TextView from '@stevederico/skateboard-ui/TextView';
-import SignUpView from '@stevederico/skateboard-ui/SignUpView';
-import SignInView from '@stevederico/skateboard-ui/SignInView';
-import PaymentView from '@stevederico/skateboard-ui/PaymentView';
-import SettingsView from '@stevederico/skateboard-ui/SettingsView';
-import NotFound from '@stevederico/skateboard-ui/NotFound';
-import { getCurrentUser } from '@stevederico/skateboard-ui/Utilities';
-import { ContextProvider, getState } from '@stevederico/skateboard-ui/Context';
-import type { SkateboardConstants } from '@stevederico/skateboard-ui/Utilities';
-import rawConstants from './constants.json';
+import { lazy, Suspense } from 'react';
+import { createSkateboardApp } from '@stevederico/skateboard-ui/App';
+import type { AppRoute } from '@stevederico/skateboard-ui/App';
+import constants from './constants.json';
 
-/** Narrow JSON shape, verified assignable to skateboard-ui constants. */
-const constants = rawConstants satisfies SkateboardConstants;
-import PreventionView from './components/PreventionView'
-import RisksView from './components/RisksView'
-import TestingView from './components/TestingView'
-
-/** Route guard that renders protected routes only when authenticated. */
-const ProtectedRoute = () => {
-  const auth = isAuthenticated();
-  return auth ? <Outlet /> : <Navigate to="/signin" replace />;
-};
+// Route-level code splitting: each view leaves the entry chunk.
+const LandingView = lazy(() => import('./components/LandingView'));
+const PreventionView = lazy(() => import('./components/PreventionView'));
+const RisksView = lazy(() => import('./components/RisksView'));
+const TestingView = lazy(() => import('./components/TestingView'));
 
 /**
- * Determine whether the current user is authenticated.
+ * Application route configuration.
  *
- * Returns true immediately when the app runs with the `noLogin` flag; otherwise
- * checks for a `token` cookie.
- *
- * @returns True if the user may access protected routes
+ * Paths are relative to `/app` (no leading slash). The shell registers them,
+ * guards them behind auth, and renders them inside the default Layout.
  */
-function isAuthenticated(): boolean {
-  // Check client-side noLogin flag first
-  if (constants.noLogin === true) {
-    return true;
-  }
-  // Otherwise check for valid auth token
-  try {
-    const token = document.cookie
-      .split('; ')
-      .find(row => row.startsWith('token='))
-      ?.split('=')[1];
-    return Boolean(token);
-  } catch (e) {
-    return false;
-  }
-}
+export const appRoutes: AppRoute[] = [
+  { path: 'prevention', element: <Suspense fallback={null}><PreventionView /></Suspense> },
+  { path: 'risks', element: <Suspense fallback={null}><RisksView /></Suspense> },
+  { path: 'testing', element: <Suspense fallback={null}><TestingView /></Suspense> }
+];
 
-/** Root application component wiring up routes and user bootstrap. */
-const App = () => {
-const location = useLocation();
-  const navigate = useNavigate();
-  const { state, dispatch } = getState();
-
-  useEffect(() => {
-    const html = document.documentElement;
-    if (!location.pathname.toLowerCase().includes('app')) {
-      document.body.classList.remove('dark');
-      html.classList.remove('dark');
-    }
-    document.title = constants.appName;
-    const appStart = async () => {
-      if (!location.pathname.toLowerCase().includes('app')) {
-        return;
-      }
-
-      // Always try to fetch user data regardless of noLogin // The server will allow the request through if noLogin is enabled on its side
-      try {
-       
-        const data = await getCurrentUser();
-        if (data) {
-          dispatch({ type: 'SET_USER', payload: data });
-        }
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
-        if (!constants.noLogin) {
-          navigate('/signin');
-        }
-      }
-    };
-
-    appStart();
-  }, [location.pathname, navigate, dispatch]);
-
-  return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/console" element={<Navigate to="/app" replace />} />
-        <Route path="/app" element={<ProtectedRoute />}>
-              <Route index element={<Navigate to="prevention" replace />} />
-              <Route path="prevention" element={<PreventionView />} />
-            <Route path="risks" element={<RisksView />} />
-            <Route path="testing" element={<TestingView />} />
-              <Route path="settings" element={<SettingsView />} />
-              <Route path="stripe" element={<PaymentView />} />
-        </Route>
-      </Route>
-      <Route path="/" element={<LandingView />} />
-      <Route path="/signin" element={<SignInView />} />
-      <Route path="/signup" element={<SignUpView />} />
-      <Route
-        path="/terms"
-        element={<TextView details={constants.termsOfService} />}
-      />
-      <Route
-        path="/privacy"
-        element={<TextView details={constants.privacyPolicy} />}
-      />
-      <Route path="/eula" element={<TextView details={constants.EULA} />} />
-      <Route
-        path="/subs"
-        element={<TextView details={constants.subscriptionDetails} />}
-      />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  );
-};
-
-const container = document.getElementById('root');
-if (!container) throw new Error('Root element #root not found');
-const root = createRoot(container);
-root.render(
-  <ContextProvider constants={constants}>
-    <Router>
-      <App />
-    </Router>
-  </ContextProvider>
-);
+createSkateboardApp({
+  constants,
+  appRoutes,
+  defaultRoute: 'prevention',
+  landingPage: <Suspense fallback={null}><LandingView /></Suspense>,
+  // Legal bodies stay out of the main chunk; /terms /privacy /eula /subs load src/legal.json on demand.
+  loadLegal: () => import('./legal.json')
+});
