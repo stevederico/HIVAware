@@ -13,14 +13,15 @@ HIV education and awareness application providing information about prevention, 
 ## Tech Stack
 
 - React 19
-- Vite 6
-- React Router 7
+- Vite 8
 - Tailwind CSS 4
-- Deno 2.2+
+- skateboard-ui 5.1.0 (application shell)
+- Zero-crate Rust backend (SQLite via system libsqlite3)
 
 ## Prerequisites
 
-- Deno 2.2 or higher
+- Node.js 24 or higher
+- Rust 1.95 or higher (backend only)
 
 ## Installation
 
@@ -32,12 +33,13 @@ cd HIVAware
 
 2. Install dependencies:
 ```bash
-deno install
+npm install
 ```
 
 3. Start the development server:
 ```bash
-deno run start
+npm run start      # frontend on :5173
+cd backend && cargo run   # backend on :8000
 ```
 
 The app will be available at `http://localhost:5173`
@@ -47,7 +49,7 @@ The app will be available at `http://localhost:5173`
 Update `src/constants.json` to configure:
 - `backendURL` - Your backend server URL (or set `noLogin: true` to run without backend)
 - `companyName`, `companyWebsite`, `companyEmail` - Your organization info
-- `termsOfService`, `privacyPolicy`, `EULA` - Your legal documents
+- `hasTermsOfService`, `hasPrivacyPolicy`, `hasEULA`, `hasSubscriptionDetails` - Footer link toggles (bodies live in `src/legal.json`)
 - `stripeProducts` - Payment configuration (if using Stripe)
 - `pages` - Navigation menu items
 
@@ -55,7 +57,7 @@ Update `src/constants.json` to configure:
 
 Build for production:
 ```bash
-deno run build
+npm run build
 ```
 
 The built files will be in the `dist/` directory.
@@ -64,7 +66,7 @@ The built files will be in the `dist/` directory.
 
 This app can run with or without a backend. Set `"noLogin": true` in `src/constants.json` to disable authentication requirements.
 
-For backend integration, the app expects endpoints compatible with the skateboard-ui library.
+The backend is zero-crate Rust in `backend/` (`cargo run`, `cargo test --locked`). In production it refuses to start unless `JWT_SECRET` is set, at least 32 characters, and not the `.env.example` placeholder.
 
 ## Contributing
 

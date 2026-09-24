@@ -1,8 +1,7 @@
-import { useNavigate } from 'react-router';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@stevederico/skateboard-ui/ThemeProvider';
 import { getState } from '@stevederico/skateboard-ui/Context';
-import DynamicIcon from '@stevederico/skateboard-ui/DynamicIcon';
-import { Sun, Moon, Check } from '@stevederico/skateboard-ui/icons';
+import { useSafeNavigate } from '@stevederico/skateboard-ui/Utilities';
+import { Ribbon, Sun, Moon, Check } from 'lucide-react';
 import { Button } from '@stevederico/skateboard-ui/shadcn/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@stevederico/skateboard-ui/shadcn/ui/card';
 import { Badge } from '@stevederico/skateboard-ui/shadcn/ui/badge';
@@ -17,7 +16,7 @@ import { Separator } from '@stevederico/skateboard-ui/shadcn/ui/separator';
 export default function LandingView() {
   const { state } = getState();
   const constants = state.constants;
-  const navigate = useNavigate();
+  const navigate = useSafeNavigate();
   const { theme, setTheme } = useTheme();
   const isDarkMode = theme === 'dark';
 
@@ -27,7 +26,7 @@ export default function LandingView() {
       <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
         <nav className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <DynamicIcon name={constants.appIcon} size={28} className="text-primary" strokeWidth={2} />
+            <Ribbon size={28} className="text-primary" strokeWidth={2} aria-hidden="true" />
             <span className="text-2xl font-bold text-foreground">{constants.appName}</span>
           </div>
 
