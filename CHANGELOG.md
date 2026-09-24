@@ -1,5 +1,10 @@
 # Changelog
 
+5.7.0
+
+  Restore stripe route
+  Mount PaymentView
+
 5.6.0
 
   Upgrade skateboard 5.6.0

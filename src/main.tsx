@@ -11,6 +11,7 @@ import './assets/styles.css';
 import { lazy, Suspense } from 'react';
 import { createSkateboardApp } from '@stevederico/skateboard-ui/App';
 import type { AppRoute } from '@stevederico/skateboard-ui/App';
+import PaymentView from '@stevederico/skateboard-ui/PaymentView';
 import constants from './constants.json';
 
 // Route-level code splitting: each view leaves the entry chunk.
@@ -24,11 +25,16 @@ const TestingView = lazy(() => import('./components/TestingView'));
  *
  * Paths are relative to `/app` (no leading slash). The shell registers them,
  * guards them behind auth, and renders them inside the default Layout.
+ *
+ * `stripe` is the path master mounted `PaymentView` on. The shell also
+ * registers `payment` because checkout return URLs use `/app/payment`.
+ * Both paths render the same view.
  */
 export const appRoutes: AppRoute[] = [
   { path: 'prevention', element: <Suspense fallback={null}><PreventionView /></Suspense> },
   { path: 'risks', element: <Suspense fallback={null}><RisksView /></Suspense> },
-  { path: 'testing', element: <Suspense fallback={null}><TestingView /></Suspense> }
+  { path: 'testing', element: <Suspense fallback={null}><TestingView /></Suspense> },
+  { path: 'stripe', element: <PaymentView /> }
 ];
 
 createSkateboardApp({
