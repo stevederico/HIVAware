@@ -1,8 +1,0 @@
-{
-  "staticDir": "../dist",
-  "database": {
-    "db": "MyApp",
-    "dbType": "sqlite",
-    "connectionString": "./databases/MyApp.db"
-  }
-}
